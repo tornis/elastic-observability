@@ -165,3 +165,4 @@ services:
 
 networks:
   spring-petclinic-net:
+    driver: bridge
