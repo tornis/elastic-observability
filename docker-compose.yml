@@ -52,8 +52,6 @@ services:
       INITIALIZE_DB: "true"
       ELASTIC_APM_SERVICE_NAME: petclinic-spring
     depends_on:
-      - elasticsearch
-      - apm-server
       - mysql
     healthcheck:
       test: ["CMD", "curl", "--write-out", "'HTTP %{http_code}'", "--silent", "--output", "/dev/null", "http://spring-petclinic-server:${SERVER_PORT:-8000}/"]
@@ -77,8 +75,8 @@ services:
         max-size: '2m'
         max-file: '5'
     environment:
-      ELASTIC_APM_SERVER_URL: http://apm-server:${APM_SERVER_PORT:-8200}
-      ELASTIC_APM_SERVER_JS_URL: http://localhost:8200
+      ELASTIC_APM_SERVER_URL: http://62.171.144.169:${APM_SERVER_PORT:-8200}
+      ELASTIC_APM_SERVER_JS_URL: http://62.171.144.169:8200
       ELASTIC_APM_SERVICE_VERSION: 1.0.0
       ELASTIC_APM_SERVICE_NAME: petclinic-client
       ELASTIC_APM_CLIENT_SERVICE_NAME: petclinic-react
@@ -86,7 +84,7 @@ services:
       SERVER_PORT: ${CLIENT_SERVER_PORT:-3000}
       NODE_ENV: production
       ELASTICSEARCH_USERNAME: elastic
-      ELASTICSEARCH_URL: http://elasticsearch:9200
+      ELASTICSEARCH_URL: https://62.171.144.169:9200
       ELASTICSEARCH_PASSWORD: ${ELASTIC_PASSWORD:-changeme}
       PETCLINIC_INTERNAL_URL: "http://spring-petclinic-client:${CLIENT_SERVER_PORT:-3000}"
       PETCLINIC_EXTERNAL_URL: "http://localhost:${CLIENT_SERVER_PORT:-3000}"
@@ -116,15 +114,13 @@ services:
         max-size: '2m'
         max-file: '5'
     environment:
-      ELASTIC_APM_SERVER_URL: http://apm-server:${APM_SERVER_PORT:-8200}
+      ELASTIC_APM_SERVER_URL: http://62.171.144.169:${APM_SERVER_PORT:-8200}
       ELASTIC_APM_SERVICE_VERSION: 1.0.0
       ELASTIC_APM_SERVICE_NAME: petclinic-address-finder
       ELASTIC_APM_CLIENT_SERVICE_NAME: petclinic-react
       ELASTICSEARCH_USER: elastic
-      ELASTICSEARCH_URL: http://elasticsearch:9200
+      ELASTICSEARCH_URL: https://62.171.144.169:9200
       ELASTICSEARCH_PASSWORD: ${ELASTIC_PASSWORD:-changeme}
-    depends_on:
-      - elasticsearch
 
   spring-client-loadgen:
     build:
@@ -169,4 +165,3 @@ services:
 
 networks:
   spring-petclinic-net:
-    driver: bridge
